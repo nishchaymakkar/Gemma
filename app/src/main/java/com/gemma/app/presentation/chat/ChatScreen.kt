@@ -3,43 +3,78 @@ package com.gemma.app.presentation.chat
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.gemma.app.presentation.chat.components.ChatDrawer
 import com.gemma.app.presentation.chat.components.ChatInputBar
+import com.gemma.app.presentation.chat.components.ChatMessageList
 import com.gemma.app.presentation.chat.components.ChatTopBar
 import com.gemma.app.presentation.chat.components.EmptyChatState
-@Preview
+import kotlinx.coroutines.launch
+
 @Composable
-fun ChatScreen() {
-    Scaffold(
-        topBar = {
-            ChatTopBar(
-                onMenuClick = { /* Handle Menu Click */ },
-                onNewChatClick = { /* Handle New Chat Click */ }
-            )
-        },
-        bottomBar = {
-            ChatInputBar(
-                onSend = { message ->
-                    // TODO: Dispatch send event to ViewModel
+fun ChatScreen(
+    viewModel: ChatViewModel = viewModel()
+) {
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+    val uiState by viewModel.uiState.collectAsState()
+
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            ChatDrawer(
+                onNewChat = {
+                    viewModel.onEvent(ChatEvent.NewChat)
+                    scope.launch { drawerState.close() }
                 }
             )
-        },
-        containerColor = Color(0xFFFAFAFA)
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .background(Color(0xFFFAFAFA)),
-            contentAlignment = Alignment.Center
-        ) {
-            EmptyChatState()
+        }
+    ) {
+        Scaffold(
+            modifier = Modifier.imePadding(),
+            topBar = {
+                ChatTopBar(
+                    onMenuClick = { 
+                        scope.launch { drawerState.open() } 
+                    },
+                    onNewChatClick = { viewModel.onEvent(ChatEvent.NewChat) }
+                )
+            },
+            bottomBar = {
+                ChatInputBar(
+                    onSend = { message, images ->
+                        viewModel.onEvent(ChatEvent.SendMessage(message, images))
+                    }
+                )
+            },
+            containerColor = Color(0xFFFAFAFA)
+        ) { innerPadding ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .background(Color(0xFFFAFAFA)),
+                contentAlignment = if (uiState.messages.isEmpty()) Alignment.Center else Alignment.TopCenter
+            ) {
+                if (uiState.messages.isEmpty()) {
+                    EmptyChatState()
+                } else {
+                    ChatMessageList(messages = uiState.messages)
+                }
+            }
         }
     }
 }

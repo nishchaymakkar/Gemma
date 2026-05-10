@@ -62,11 +62,11 @@ fun AttachmentMenu(
                 label = "Photo",
                 onClick = onPhotoClick
             )
-            AttachmentMenuItem(
-                icon = Icons.Outlined.AttachFile,
-                label = "File",
-                onClick = onFileClick
-            )
+//            AttachmentMenuItem(
+//                icon = Icons.Outlined.AttachFile,
+//                label = "File",
+//                onClick = onFileClick
+//            )
         }
     }
 }
@@ -78,7 +78,7 @@ private fun AttachmentMenuItem(
     onClick: () -> Unit
 ) {
     Row(
-        modifier = Modifier.clickable { onClick() },
+        modifier = Modifier.fillMaxWidth().clickable { onClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Surface(
