@@ -56,7 +56,7 @@ fun ChatDrawer(
                 // Header
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.Top
                 ) {
                     Text(
                         text = "Gemma",
@@ -98,7 +98,7 @@ fun ChatDrawer(
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
                                     Text(
-                                        text = "AB",
+                                        text = "NM",
                                         color = Color.White,
                                         fontWeight = FontWeight.SemiBold,
                                         fontSize = 18.sp

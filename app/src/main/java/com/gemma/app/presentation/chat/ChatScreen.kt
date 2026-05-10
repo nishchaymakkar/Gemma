@@ -3,6 +3,7 @@ package com.gemma.app.presentation.chat
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
@@ -43,6 +44,7 @@ fun ChatScreen(
         }
     ) {
         Scaffold(
+            modifier = Modifier.imePadding(),
             topBar = {
                 ChatTopBar(
                     onMenuClick = { 
@@ -53,8 +55,8 @@ fun ChatScreen(
             },
             bottomBar = {
                 ChatInputBar(
-                    onSend = { message ->
-                        viewModel.onEvent(ChatEvent.SendMessage(message))
+                    onSend = { message, images ->
+                        viewModel.onEvent(ChatEvent.SendMessage(message, images))
                     }
                 )
             },

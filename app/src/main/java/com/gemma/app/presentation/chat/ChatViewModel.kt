@@ -2,16 +2,21 @@ package com.gemma.app.presentation.chat
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
+import com.gemma.app.data.repository.LlmRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import okhttp3.sse.EventSource
 import java.util.UUID
 
 class ChatViewModel : ViewModel() {
     
+    private val repository = LlmRepository()
+    private var currentEventSource: EventSource? = null
+
     private val _uiState = MutableStateFlow(ChatUiState())
     val uiState: StateFlow<ChatUiState> = _uiState.asStateFlow()
 
@@ -21,34 +26,66 @@ class ChatViewModel : ViewModel() {
                 val userMessage = ChatMessage(
                     id = UUID.randomUUID().toString(),
                     text = event.text,
-                    isFromUser = true
+                    isFromUser = true,
+                    images = event.images
                 )
                 
                 _uiState.update { it.copy(messages = it.messages + userMessage) }
                 
-                // Simulate network delay and reply
-                viewModelScope.launch {
-                    delay(1000) // 1 second delay
-                    val dummyResponse = ChatMessage(
-                        id = UUID.randomUUID().toString(),
-                        text = """
-                            Here’s a top- notch match latte recipe that balnces flavor, creminess and touch of sweetness- perfect hot or iced.
-
-                            ## Best Macha Latte Recipe (Cafe- Style)
-
-                            **Ingredients** (for 1 serving):
-                            * **1 tsp ceremonial-grade matcha** (use culinary-grade only if you’re on a budget)
-                            * **2 oz hot water** (about 175°F / 80° C - not boiling)
-                            * **6 oz milk** ( dairy or non-dairy like oat, almond, or soy)
-                        """.trimIndent(),
-                        isFromUser = false
-                    )
-                    _uiState.update { it.copy(messages = it.messages + dummyResponse) }
-                }
+                val responseId = UUID.randomUUID().toString()
+                val initialResponse = ChatMessage(
+                    id = responseId,
+                    text = "",
+                    isFromUser = false
+                )
+                
+                _uiState.update { it.copy(messages = it.messages + initialResponse) }
+                
+                currentEventSource?.cancel()
+                currentEventSource = repository.streamChat(
+                    message = event.text,
+                    onToken = { token ->
+                        viewModelScope.launch(Dispatchers.Main) {
+                            _uiState.update { state ->
+                                val messages = state.messages.map {
+                                    if (it.id == responseId) {
+                                        it.copy(text = it.text + token)
+                                    } else {
+                                        it
+                                    }
+                                }
+                                state.copy(messages = messages)
+                            }
+                        }
+                    },
+                    onComplete = {
+                        // Handle completion
+                    },
+                    onError = { error ->
+                        viewModelScope.launch(Dispatchers.Main) {
+                            _uiState.update { state ->
+                                val messages = state.messages.map {
+                                    if (it.id == responseId) {
+                                        it.copy(text = it.text + "\n[Error: ${error.message}]")
+                                    } else {
+                                        it
+                                    }
+                                }
+                                state.copy(messages = messages)
+                            }
+                        }
+                    }
+                )
             }
             is ChatEvent.NewChat -> {
                 _uiState.update { it.copy(messages = emptyList()) }
+                currentEventSource?.cancel()
             }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        currentEventSource?.cancel()
     }
 }

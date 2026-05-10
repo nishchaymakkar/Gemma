@@ -3,7 +3,8 @@ package com.gemma.app.presentation.chat
 data class ChatMessage(
     val id: String,
     val text: String,
-    val isFromUser: Boolean
+    val isFromUser: Boolean,
+    val images: List<android.net.Uri> = emptyList()
 )
 
 data class ChatUiState(

@@ -60,6 +60,9 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    // Coil for images
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
     // Ktor
     val ktorVersion = "3.4.3"
     implementation("io.ktor:ktor-client-core:$ktorVersion")
@@ -70,4 +73,11 @@ dependencies {
     // Koin
     val koinVersion = "4.2.1"
     implementation("io.insert-koin:koin-androidx-compose:$koinVersion")
+
+    // OkHttp & SSE
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:okhttp-sse:4.12.0")
+    
+    // Moshi for JSON parsing
+    implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
 }
