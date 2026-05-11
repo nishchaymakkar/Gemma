@@ -36,14 +36,32 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.foundation.background
 import android.net.Uri
+import androidx.compose.foundation.gestures.ScrollableDefaults
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberOverscrollEffect
+import androidx.compose.runtime.LaunchedEffect
 
 @Composable
 fun ChatMessageList(
     messages: List<ChatMessage>,
     modifier: Modifier = Modifier
 ) {
+    val listState = rememberLazyListState()
+
+    LaunchedEffect(messages.size, messages.lastOrNull()?.text) {
+        if (messages.isNotEmpty()) {
+            listState.animateScrollToItem(messages.size /*- 1*/)
+        }
+    }
+
     LazyColumn(
+        state = listState,
         modifier = modifier.fillMaxWidth(),
+        flingBehavior = ScrollableDefaults.flingBehavior(),
+        overscrollEffect = rememberOverscrollEffect(),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         items(messages, key = { it.id }) { message ->
@@ -94,7 +112,7 @@ fun UserMessageBubble(message: ChatMessage) {
                 Surface(
                     color = Color(0xFFF0F0F0),
                     shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.widthIn( max = 350.dp)
                 ) {
                     Text(
                         text = message.text,

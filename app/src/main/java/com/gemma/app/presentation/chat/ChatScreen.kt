@@ -55,6 +55,7 @@ fun ChatScreen(
             },
             bottomBar = {
                 ChatInputBar(
+                    isLoading = uiState.isLoading,
                     onSend = { message, images ->
                         viewModel.onEvent(ChatEvent.SendMessage(message, images))
                     }

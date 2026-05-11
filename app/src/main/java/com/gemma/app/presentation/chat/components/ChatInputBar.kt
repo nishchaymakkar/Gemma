@@ -53,6 +53,7 @@ import androidx.core.net.toUri
 
 @Composable
 fun ChatInputBar(
+    isLoading: Boolean = false,
     onSend: (String, List<Uri>) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -180,19 +181,27 @@ fun ChatInputBar(
                 ) {
                     IconButton(
                         onClick = {
-                            if (text.isNotBlank()) {
+                            if (text.isNotBlank() && !isLoading) {
                                 onSend(text, selectedImages)
                                 text = ""
                                 selectedImagesUris = emptyList()
                             }
                         }
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowUpward,
-                            contentDescription = "Send",
-                            tint = Color.White,
-                            modifier = Modifier.size(20.dp)
-                        )
+                        if (isLoading) {
+                            androidx.compose.material3.CircularProgressIndicator(
+                                modifier = Modifier.size(20.dp),
+                                color = Color.White,
+                                strokeWidth = 2.dp
+                            )
+                        } else {
+                            Icon(
+                                imageVector = Icons.Default.ArrowUpward,
+                                contentDescription = "Send",
+                                tint = Color.White,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
                     }
                 }
             }
@@ -328,19 +337,27 @@ fun ChatInputBar(
                         ) {
                             IconButton(
                                 onClick = {
-                                    if (text.isNotBlank() || selectedImages.isNotEmpty()) {
+                                    if ((text.isNotBlank() || selectedImages.isNotEmpty()) && !isLoading) {
                                         onSend(text, selectedImages)
                                         text = ""
                                         selectedImagesUris = emptyList()
                                     }
                                 }
                             ) {
-                                Icon(
-                                    imageVector = Icons.Default.ArrowUpward,
-                                    contentDescription = "Send",
-                                    tint = Color.White,
-                                    modifier = Modifier.size(20.dp)
-                                )
+                                if (isLoading) {
+                                    androidx.compose.material3.CircularProgressIndicator(
+                                        modifier = Modifier.size(20.dp),
+                                        color = Color.White,
+                                        strokeWidth = 2.dp
+                                    )
+                                } else {
+                                    Icon(
+                                        imageVector = Icons.Default.ArrowUpward,
+                                        contentDescription = "Send",
+                                        tint = Color.White,
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                }
                             }
                         }
                     }

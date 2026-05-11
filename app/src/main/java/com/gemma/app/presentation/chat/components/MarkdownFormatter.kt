@@ -17,25 +17,30 @@ fun parseMarkdownToAnnotatedString(text: String): AnnotatedString {
         val lines = text.split("\n")
         
         for ((index, line) in lines.withIndex()) {
-            when {
-                // Headings: ## Heading or ### Heading
-                line.trimStart().startsWith("## ") || line.trimStart().startsWith("### ") -> {
-                    val content = line.trimStart().removePrefix("### ").removePrefix("## ")
-                    withStyle(style = SpanStyle(fontSize = 20.sp, fontWeight = FontWeight.SemiBold, color = Color.Black)) {
-                        append(content)
-                    }
-                }
-                // Bullet points
-                line.trimStart().startsWith("* ") || line.trimStart().startsWith("- ") -> {
-                    val content = line.trimStart().substring(2)
-                    append("•  ") // Indent and add bullet
-                    appendFormattedLine(content)
-                }
-                // Regular line
-                else -> {
-                    appendFormattedLine(line)
-                }
+            var currentLine = line.trimStart()
+            
+            val isBullet = currentLine.startsWith("* ") || currentLine.startsWith("- ")
+            if (isBullet) {
+                currentLine = currentLine.substring(2).trimStart()
             }
+            
+            val isHeading = currentLine.startsWith("#")
+            if (isHeading) {
+                currentLine = currentLine.trimStart('#').trimStart()
+            }
+            
+            if (isBullet) {
+                append("•  ")
+            }
+            
+            if (isHeading) {
+                withStyle(style = SpanStyle(fontSize = 20.sp, fontWeight = FontWeight.SemiBold, color = Color.Black)) {
+                    appendFormattedLine(currentLine)
+                }
+            } else {
+                appendFormattedLine(currentLine)
+            }
+            
             if (index < lines.size - 1) {
                 append("\n")
             }
@@ -49,15 +54,16 @@ fun parseMarkdownToAnnotatedString(text: String): AnnotatedString {
 private fun AnnotatedString.Builder.appendFormattedLine(line: String) {
     val parts = line.split("**")
     for ((index, part) in parts.withIndex()) {
+        val cleanPart = part.replace("*", "")
         if (index % 2 == 1) {
             // It's bold
             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, color = Color.Black)) {
-                append(part)
+                append(cleanPart)
             }
         } else {
             // It's normal text
             withStyle(style = SpanStyle(color = Color.Black)) {
-                append(part)
+                append(cleanPart)
             }
         }
     }

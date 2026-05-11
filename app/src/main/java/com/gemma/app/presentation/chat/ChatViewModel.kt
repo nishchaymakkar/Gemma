@@ -1,8 +1,10 @@
 package com.gemma.app.presentation.chat
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.gemma.app.data.repository.LlmRepository
+import io.ktor.http.ContentType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,8 +14,8 @@ import kotlinx.coroutines.launch
 import okhttp3.sse.EventSource
 import java.util.UUID
 
-class ChatViewModel : ViewModel() {
-    
+class ChatViewModel(application: Application) : AndroidViewModel(application) {
+
     private val repository = LlmRepository()
     private var currentEventSource: EventSource? = null
 
@@ -22,70 +24,85 @@ class ChatViewModel : ViewModel() {
 
     fun onEvent(event: ChatEvent) {
         when (event) {
-            is ChatEvent.SendMessage -> {
-                val userMessage = ChatMessage(
-                    id = UUID.randomUUID().toString(),
-                    text = event.text,
-                    isFromUser = true,
-                    images = event.images
-                )
-                
-                _uiState.update { it.copy(messages = it.messages + userMessage) }
-                
-                val responseId = UUID.randomUUID().toString()
-                val initialResponse = ChatMessage(
-                    id = responseId,
-                    text = "",
-                    isFromUser = false
-                )
-                
-                _uiState.update { it.copy(messages = it.messages + initialResponse) }
-                
-                currentEventSource?.cancel()
-                currentEventSource = repository.streamChat(
-                    message = event.text,
-                    onToken = { token ->
-                        viewModelScope.launch(Dispatchers.Main) {
-                            _uiState.update { state ->
-                                val messages = state.messages.map {
-                                    if (it.id == responseId) {
-                                        it.copy(text = it.text + token)
-                                    } else {
-                                        it
-                                    }
-                                }
-                                state.copy(messages = messages)
-                            }
-                        }
-                    },
-                    onComplete = {
-                        // Handle completion
-                    },
-                    onError = { error ->
-                        viewModelScope.launch(Dispatchers.Main) {
-                            _uiState.update { state ->
-                                val messages = state.messages.map {
-                                    if (it.id == responseId) {
-                                        it.copy(text = it.text + "\n[Error: ${error.message}]")
-                                    } else {
-                                        it
-                                    }
-                                }
-                                state.copy(messages = messages)
-                            }
-                        }
-                    }
-                )
-            }
-            is ChatEvent.NewChat -> {
-                _uiState.update { it.copy(messages = emptyList()) }
-                currentEventSource?.cancel()
-            }
+            is ChatEvent.SendMessage -> sendMessage(event)
+            ChatEvent.NewChat -> newChat()
         }
     }
 
-    override fun onCleared() {
-        super.onCleared()
+    private fun sendMessage(event: ChatEvent.SendMessage) {
+        val trimmedMessage = event.text.trim()
+        if (trimmedMessage.isEmpty() && event.images.isEmpty()) return
+
+        val userMessage = ChatMessage(
+            id = UUID.randomUUID().toString(),
+            text = trimmedMessage,
+            isFromUser = true,
+            images = event.images
+        )
+
+        val responseId = UUID.randomUUID().toString()
+        val initialResponse = ChatMessage(
+            id = responseId,
+            text = "",
+            isFromUser = false
+        )
+
+        _uiState.update { state ->
+            state.copy(
+                isLoading = true,
+                error = null,
+                messages = state.messages + userMessage + initialResponse
+            )
+        }
+
         currentEventSource?.cancel()
+        currentEventSource = repository.streamChat(
+            message = trimmedMessage,
+            images = event.images,
+            onToken = { token ->
+                _uiState.update { state ->
+                    state.copy(
+                        messages = state.messages.map { message ->
+                            if (message.id == responseId) {
+                                message.copy(text = message.text + token)
+                            } else {
+                                message
+                            }
+                        }
+                    )
+                }
+            },
+            onComplete = {
+                _uiState.update { state -> state.copy(isLoading = false) }
+            },
+            contentResolver = getApplication<Application>().contentResolver,
+            onError = { error ->
+                _uiState.update { state ->
+                    state.copy(
+                        isLoading = false,
+                        error = error.message,
+                        messages = state.messages.map { message ->
+                            if (message.id == responseId) {
+                                message.copy(text = message.text + "\n[Error: ${error.message ?: "Unknown error"}]")
+                            } else {
+                                message
+                            }
+                        }
+                    )
+                }
+            }
+        )
+    }
+
+    private fun newChat() {
+        currentEventSource?.cancel()
+        currentEventSource = null
+        _uiState.update { ChatUiState() }
+    }
+
+    override fun onCleared() {
+        currentEventSource?.cancel()
+        currentEventSource = null
+        super.onCleared()
     }
 }

@@ -101,7 +101,7 @@ fun ChatDrawer(
                                         text = "NM",
                                         color = Color.White,
                                         fontWeight = FontWeight.SemiBold,
-                                        fontSize = 18.sp
+                                        fontSize = 14.sp
                                     )
                                 }
                             }
@@ -151,23 +151,23 @@ fun ChatDrawer(
                 onClick = onNewChat,
                 containerColor = Color.Black,
                 contentColor = Color.White,
-                shape = RoundedCornerShape(65.dp),
+                shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(end = 24.dp, bottom = 24.dp)
             ) {
                 Row(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
                         imageVector = Icons.Default.Edit,
                         contentDescription = "New Chat",
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(20.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "Chat",
+                        text = "New Chat",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
                     )
