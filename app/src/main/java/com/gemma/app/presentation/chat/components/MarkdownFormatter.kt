@@ -1,5 +1,7 @@
 package com.gemma.app.presentation.chat.components
 
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -12,6 +14,7 @@ import androidx.compose.ui.unit.sp
  * A lightweight custom markdown parser that handles simple bolding, headings, and bullet points.
  * For advanced usage, consider adding a library like Markwon or compose-markdown.
  */
+@Composable
 fun parseMarkdownToAnnotatedString(text: String): AnnotatedString {
     return buildAnnotatedString {
         val lines = text.split("\n")
@@ -34,7 +37,7 @@ fun parseMarkdownToAnnotatedString(text: String): AnnotatedString {
             }
             
             if (isHeading) {
-                withStyle(style = SpanStyle(fontSize = 20.sp, fontWeight = FontWeight.SemiBold, color = Color.Black)) {
+                withStyle(style = SpanStyle(fontSize = 20.sp, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)) {
                     appendFormattedLine(currentLine)
                 }
             } else {
@@ -51,20 +54,22 @@ fun parseMarkdownToAnnotatedString(text: String): AnnotatedString {
 /**
  * Parses **bold** markers inside a single line.
  */
+@Composable
 private fun AnnotatedString.Builder.appendFormattedLine(line: String) {
     val parts = line.split("**")
     for ((index, part) in parts.withIndex()) {
         val cleanPart = part.replace("*", "")
         if (index % 2 == 1) {
             // It's bold
-            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, color = Color.Black)) {
+            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)) {
                 append(cleanPart)
             }
         } else {
             // It's normal text
-            withStyle(style = SpanStyle(color = Color.Black)) {
+            withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onSurface)) {
                 append(cleanPart)
             }
         }
     }
 }
+

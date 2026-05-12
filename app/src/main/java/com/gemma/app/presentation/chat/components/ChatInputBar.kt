@@ -26,6 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -101,10 +102,11 @@ fun ChatInputBar(
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp, vertical = 12.dp)
                 .shadow(elevation = 16.dp,
-                    spotColor = Color(0x29000000),
-                    ambientColor = Color(0x29000000)),
+                    spotColor = Color(0X29000000),
+                    ambientColor = Color(0X29000000)
+                ),
             shape = RoundedCornerShape(100.dp),
-            color = Color(0xFFFFFFFF)
+            color = MaterialTheme.colorScheme.surfaceBright
         ) {
             Row(
                 modifier = Modifier.padding(8.dp),
@@ -118,7 +120,7 @@ fun ChatInputBar(
                         Icon(
                             imageVector = Icons.Default.Add,
                             contentDescription = "Add Files",
-                            tint = Color.Black,
+                            tint = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.size(20.dp)
                         )
                     }
@@ -158,14 +160,14 @@ fun ChatInputBar(
                         onValueChange = { text = it },
                         textStyle = TextStyle(
                             fontSize = 16.sp,
-                            color = Color(0xFF292929)
+                            color = MaterialTheme.colorScheme.onSurface
                         ),
                         modifier = Modifier.fillMaxWidth(),
                         decorationBox = { innerTextField ->
                             if (text.isEmpty()) {
                                 Text(
                                     text = "Ask Gemma",
-                                    color = Color.Gray,
+                                    color = MaterialTheme.colorScheme.onSurface,
                                     fontSize = 16.sp
                                 )
                             }
@@ -177,7 +179,7 @@ fun ChatInputBar(
                 Surface(
                     modifier = Modifier.size(36.dp),
                     shape = CircleShape,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onSurface
                 ) {
                     IconButton(
                         onClick = {
@@ -191,14 +193,14 @@ fun ChatInputBar(
                         if (isLoading) {
                             androidx.compose.material3.CircularProgressIndicator(
                                 modifier = Modifier.size(20.dp),
-                                color = Color.White,
+                                color = MaterialTheme.colorScheme.surface,
                                 strokeWidth = 2.dp
                             )
                         } else {
                             Icon(
                                 imageVector = Icons.Default.ArrowUpward,
                                 contentDescription = "Send",
-                                tint = Color.White,
+                                tint = MaterialTheme.colorScheme.surface,
                                 modifier = Modifier.size(20.dp)
                             )
                         }
@@ -218,9 +220,9 @@ fun ChatInputBar(
                 Surface(
                     modifier = Modifier
                         .size(44.dp)
-                        .shadow(elevation = 16.dp, spotColor = Color(0x29000000), ambientColor = Color(0x29000000), shape = CircleShape),
+                        .shadow(elevation = 16.dp, spotColor = MaterialTheme.colorScheme.outline, ambientColor = MaterialTheme.colorScheme.outline, shape = CircleShape),
                     shape = CircleShape,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.surface
                 ) {
                     IconButton(onClick = { showAttachmentMenu = !showAttachmentMenu }) {
                         Icon(Icons.Default.Add, contentDescription = "Add Files", modifier = Modifier.size(20.dp))
@@ -253,9 +255,9 @@ fun ChatInputBar(
             Surface(
                 modifier = Modifier
                     .weight(1f)
-                    .shadow(elevation = 16.dp, spotColor = Color(0x29000000), ambientColor = Color(0x29000000), shape = RoundedCornerShape(20.dp)),
+                    .shadow(elevation = 16.dp, spotColor = MaterialTheme.colorScheme.outline, ambientColor = MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(20.dp)),
                 shape = RoundedCornerShape(20.dp),
-                color = Color.White
+                color = MaterialTheme.colorScheme.surface
             ) {
                 Column(
                     modifier = Modifier.padding(8.dp),
@@ -269,7 +271,7 @@ fun ChatInputBar(
                                 modifier = Modifier
                                     .size(width = 80.dp, height = 110.dp)
                                     .clip(RoundedCornerShape(12.dp))
-                                    .background(Color(0xFFF0F0F0))
+                                    .background(MaterialTheme.colorScheme.surfaceVariant)
                             ) {
                                 AsyncImage(
                                     model = uri,
@@ -283,12 +285,12 @@ fun ChatInputBar(
                                         .padding(4.dp)
                                         .size(28.dp),
                                     shape = RoundedCornerShape(8.dp),
-                                    color = Color.White
+                                    color = MaterialTheme.colorScheme.surface
                                 ) {
                                     IconButton(
                                         onClick = { selectedImagesUris = selectedImagesUris.filter { it != uri.toString() } }
                                     ) {
-                                        Icon(Icons.Default.Close, contentDescription = "Remove", modifier = Modifier.size(16.dp), tint = Color.Black)
+                                        Icon(Icons.Default.Close, contentDescription = "Remove", modifier = Modifier.size(16.dp), tint = MaterialTheme.colorScheme.onSurface)
                                     }
                                 }
                             }
@@ -299,7 +301,7 @@ fun ChatInputBar(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(12.dp))
-                            .background(Color.White)
+                            .background(MaterialTheme.colorScheme.surface)
                             .padding(horizontal = 4.dp, vertical = 0.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -314,14 +316,14 @@ fun ChatInputBar(
                                 onValueChange = { text = it },
                                 textStyle = TextStyle(
                                     fontSize = 16.sp,
-                                    color = Color(0xFF292929)
+                                    color = MaterialTheme.colorScheme.onSurface
                                 ),
                                 modifier = Modifier.fillMaxWidth(),
                                 decorationBox = { innerTextField ->
                                     if (text.isEmpty()) {
                                         Text(
                                             text = "Ask Gemma",
-                                            color = Color.Gray,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                                             fontSize = 16.sp
                                         )
                                     }
@@ -333,7 +335,7 @@ fun ChatInputBar(
                         Surface(
                             modifier = Modifier.size(36.dp),
                             shape = CircleShape,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onSurface
                         ) {
                             IconButton(
                                 onClick = {
@@ -347,14 +349,14 @@ fun ChatInputBar(
                                 if (isLoading) {
                                     androidx.compose.material3.CircularProgressIndicator(
                                         modifier = Modifier.size(20.dp),
-                                        color = Color.White,
+                                        color = MaterialTheme.colorScheme.surface,
                                         strokeWidth = 2.dp
                                     )
                                 } else {
                                     Icon(
                                         imageVector = Icons.Default.ArrowUpward,
                                         contentDescription = "Send",
-                                        tint = Color.White,
+                                        tint = MaterialTheme.colorScheme.surface,
                                         modifier = Modifier.size(20.dp)
                                     )
                                 }
@@ -366,3 +368,6 @@ fun ChatInputBar(
         }
     }
 }
+
+
+

@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -110,13 +111,13 @@ fun UserMessageBubble(message: ChatMessage) {
             }
             if (message.text.isNotBlank()) {
                 Surface(
-                    color = Color(0xFFF0F0F0),
+                    color = MaterialTheme.colorScheme.surfaceVariant,
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier.widthIn( max = 350.dp)
                 ) {
                     Text(
                         text = message.text,
-                        color = Color(0xFF141414),
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 16.sp,
                         modifier = Modifier.padding(12.dp)
                     )
@@ -133,7 +134,7 @@ fun UserMessageBubble(message: ChatMessage) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Black)
+                    .background(MaterialTheme.colorScheme.onSurface)
                     .clickable { previewImageUri = null },
                 contentAlignment = Alignment.Center
             ) {
@@ -153,7 +154,7 @@ fun UserMessageBubble(message: ChatMessage) {
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = "Close",
-                        tint = Color.White
+                        tint = MaterialTheme.colorScheme.surface
                     )
                 }
             }
@@ -175,3 +176,5 @@ fun GemmaMessageBubble(text: String) {
         )
     }
 }
+
+

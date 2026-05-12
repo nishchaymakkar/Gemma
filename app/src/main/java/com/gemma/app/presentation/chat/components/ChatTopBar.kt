@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,21 +35,21 @@ fun ChatTopBar(
     ) {
         Surface(
             modifier = Modifier
-                .size(36.dp)
+                .size(44.dp)
                 .shadow(
-                    elevation = 8.dp,
+                    elevation = 16.dp,
                     shape = CircleShape,
-                    spotColor = Color(0x29000000),
-                    ambientColor = Color(0x29000000)
+                    spotColor = Color(0X29000000),
+                    //ambientColor = Color(0X29000000)
                 ),
             shape = CircleShape,
-            color = Color.White
+            color = MaterialTheme.colorScheme.surfaceBright
         ) {
             IconButton(onClick = onMenuClick) {
                 Icon(
                     imageVector = Icons.Default.Menu,
                     contentDescription = "Menu",
-                    tint = Color.Black,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.size(20.dp)
                 )
             }
@@ -56,23 +57,25 @@ fun ChatTopBar(
 
         Surface(
             modifier = Modifier
-                .size(36.dp)
+                .size(44.dp)
                 .shadow(
-                    elevation = 8.dp,
+                    elevation = 16.dp,
                     shape = CircleShape,
-                    spotColor = Color(0x29000000),
-                    ambientColor = Color(0x29000000)
+                    spotColor = Color(0X29000000),
+                    //ambientColor = Color(0X29000000)
                 ),
-            shape = CircleShape, color = Color.White
+            shape = CircleShape, color = MaterialTheme.colorScheme.surfaceBright
         ) {
             IconButton(onClick = onNewChatClick) {
                 Icon(
                     imageVector = Icons.Default.Edit,
                     contentDescription = "New Chat",
-                    tint = Color.Black,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.size(20.dp)
                 )
             }
         }
     }
 }
+
+

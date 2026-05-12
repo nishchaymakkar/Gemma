@@ -26,6 +26,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,7 +44,7 @@ fun ChatDrawer(
 ) {
     ModalDrawerSheet(
         modifier = modifier.width(360.dp),
-        drawerContainerColor = Color(0xFFFAFAFA)
+        drawerContainerColor = MaterialTheme.colorScheme.background
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Column(
@@ -62,17 +63,17 @@ fun ChatDrawer(
                         text = "Gemma",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.weight(1f)
                     )
 
                     Surface(
                         shape = RoundedCornerShape(100.dp),
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.surface,
                         modifier = Modifier.shadow(
                             elevation = 8.dp,
                             shape = RoundedCornerShape(100.dp),
-                            spotColor = Color(0x29000000)
+                            spotColor = MaterialTheme.colorScheme.outline
                         )
                     ) {
                         Row(
@@ -86,20 +87,20 @@ fun ChatDrawer(
                                 Icon(
                                     imageVector = Icons.Default.Search,
                                     contentDescription = "Search",
-                                    tint = Color.Black,
+                                    tint = MaterialTheme.colorScheme.onSurface,
                                     modifier = Modifier.size(24.dp)
                                 )
                             }
                             
                             Surface(
                                 shape = RoundedCornerShape(1000.dp),
-                                color = Color(0xFF2B7FFF),
+                                color = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(36.dp)
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
                                     Text(
                                         text = "NM",
-                                        color = Color.White,
+                                        color = MaterialTheme.colorScheme.surface,
                                         fontWeight = FontWeight.SemiBold,
                                         fontSize = 14.sp
                                     )
@@ -126,7 +127,7 @@ fun ChatDrawer(
                             text = "Recent Chats",
                             fontSize = 18.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = Color.Black,
+                            color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.padding(bottom = 16.dp)
                         )
                     }
@@ -134,7 +135,7 @@ fun ChatDrawer(
                         Text(
                             text = chatTitle,
                             fontSize = 16.sp,
-                            color = Color.Black,
+                            color = MaterialTheme.colorScheme.onSurface,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             modifier = Modifier
@@ -149,8 +150,8 @@ fun ChatDrawer(
             // FAB
             FloatingActionButton(
                 onClick = onNewChat,
-                containerColor = Color.Black,
-                contentColor = Color.White,
+                containerColor = MaterialTheme.colorScheme.onSurface,
+                contentColor = MaterialTheme.colorScheme.surface,
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
@@ -176,3 +177,6 @@ fun ChatDrawer(
         }
     }
 }
+
+
+

@@ -9,6 +9,7 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -61,13 +62,13 @@ fun ChatScreen(
                     }
                 )
             },
-            containerColor = Color(0xFFFAFAFA)
+            containerColor = MaterialTheme.colorScheme.surface
         ) { innerPadding ->
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
-                    .background(Color(0xFFFAFAFA)),
+                    .background(MaterialTheme.colorScheme.surface),
                 contentAlignment = if (uiState.messages.isEmpty()) Alignment.Center else Alignment.TopCenter
             ) {
                 if (uiState.messages.isEmpty()) {
@@ -79,3 +80,4 @@ fun ChatScreen(
         }
     }
 }
+

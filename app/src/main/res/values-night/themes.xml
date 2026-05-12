@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme for Dark Mode. -->
+    <style name="Base.Theme.MyAndroidApp" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- BackgroundDark color from our Theme -->
+        <item name="android:statusBarColor">#191C1A</item>
+        <item name="android:windowLightStatusBar">false</item> <!-- Makes icons light for dark backgrounds -->
+    </style>
+
+    <!-- Splash Screen Theme for Dark Mode -->
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <!-- Set the splash screen background to match Dark Mode background -->
+        <item name="windowSplashScreenBackground">#191C1A</item>
+        <!-- Use your app logo as the splash screen icon -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/gemma_logo</item>
+        <!-- Set the theme of the Activity that follows your splash screen -->
+        <item name="postSplashScreenTheme">@style/Theme.MyAndroidApp</item>
+    </style>
+</resources>
