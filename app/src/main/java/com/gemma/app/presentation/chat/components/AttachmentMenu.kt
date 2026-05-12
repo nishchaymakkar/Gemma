@@ -1,5 +1,6 @@
 package com.gemma.app.presentation.chat.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +21,7 @@ import androidx.compose.material.icons.outlined.PhotoCamera
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,11 +44,12 @@ fun AttachmentMenu(
             .shadow(
                 elevation = 18.dp,
                 shape = RoundedCornerShape(24.dp),
-                spotColor = Color(0x29000000),
-                ambientColor = Color(0x29000000)
+                spotColor = Color(0X29000000),
+                ambientColor = Color(0X29000000),
             ),
+        border = BorderStroke(width = .5.dp, color = MaterialTheme.colorScheme.surfaceBright),
         shape = RoundedCornerShape(24.dp),
-        color = Color.White
+        color = MaterialTheme.colorScheme.surfaceContainerLow
     ) {
         Column(
             modifier = Modifier.padding(16.dp).fillMaxWidth(),
@@ -83,14 +86,14 @@ private fun AttachmentMenuItem(
     ) {
         Surface(
             shape = CircleShape,
-            color = Color(0xFFF0F0F0),
+            color = MaterialTheme.colorScheme.surfaceContainerHigh,
             modifier = Modifier.size(40.dp) // Adjusted to fit 24dp icon with 8dp padding
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Icon(
                     imageVector = icon,
                     contentDescription = label,
-                    tint = Color.Black,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -100,9 +103,12 @@ private fun AttachmentMenuItem(
             text = label,
             fontSize = 18.sp,
             fontWeight = FontWeight.SemiBold,
-            color = Color(0xFF0D0D0D)
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
+
+
+
 
 

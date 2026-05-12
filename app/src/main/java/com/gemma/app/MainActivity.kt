@@ -11,15 +11,17 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.gemma.app.presentation.chat.ChatScreen
-import com.gemma.app.presentation.splash.SplashScreen
+import com.gemma.app.presentation.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
 //        enableEdgeToEdge()
         setContent {
-            MaterialTheme {
+            AppTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -28,17 +30,8 @@ class MainActivity : ComponentActivity() {
 
                     NavHost(
                         navController = navController,
-                        startDestination = "splash"
+                        startDestination = "chat"
                     ) {
-                        composable("splash") {
-                            SplashScreen(
-                                onNavigateToChat = {
-                                    navController.navigate("chat") {
-                                        popUpTo("splash") { inclusive = true }
-                                    }
-                                }
-                            )
-                        }
                         composable("chat") {
                             ChatScreen()
                         }

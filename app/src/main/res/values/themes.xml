@@ -9,4 +9,14 @@
     </style>
 
     <style name="Theme.MyAndroidApp" parent="Base.Theme.MyAndroidApp" />
+
+    <!-- Splash Screen Theme -->
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <!-- Set the splash screen background -->
+        <item name="windowSplashScreenBackground">@android:color/white</item>
+        <!-- Use your app logo as the splash screen icon -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/gemma_logo</item>
+        <!-- Set the theme of the Activity that follows your splash screen -->
+        <item name="postSplashScreenTheme">@style/Theme.MyAndroidApp</item>
+    </style>
 </resources>
