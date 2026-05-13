@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">जेम्मा</string>
+    <string name="back">पीछे</string>
+    <string name="app_settings">ऐप सेटिंग्स</string>
+    <string name="appearance">दिखावट</string>
+    <string name="app_language">ऐप की भाषा</string>
+    <string name="select_language">भाषा चुनें</string>
+    <string name="system_default">सिस्टम (डिफ़ॉल्ट)</string>
+    <string name="light">हल्का</string>
+    <string name="dark">गहरा</string>
+
+    <string name="lang_en">अंग्रेजी</string>
+    <string name="lang_hi">हिंदी</string>
+    <string name="lang_es">स्पेनिश</string>
+    <string name="lang_fr">फ्रेंच</string>
+    <string name="lang_de">जर्मन</string>
+</resources>
