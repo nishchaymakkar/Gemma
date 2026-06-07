@@ -27,6 +27,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ChatScreen(
+    onProfileClick: () -> Unit,
     viewModel: ChatViewModel = viewModel()
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -40,6 +41,10 @@ fun ChatScreen(
                 onNewChat = {
                     viewModel.onEvent(ChatEvent.NewChat)
                     scope.launch { drawerState.close() }
+                },
+                onProfileClick = {
+                    scope.launch { drawerState.close() }
+                    onProfileClick()
                 }
             )
         }

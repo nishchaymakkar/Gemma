@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun ChatDrawer(
     onNewChat: () -> Unit,
+    onProfileClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     ModalDrawerSheet(
@@ -70,11 +71,13 @@ fun ChatDrawer(
                     Surface(
                         shape = RoundedCornerShape(100.dp),
                         color = MaterialTheme.colorScheme.surface,
-                        modifier = Modifier.shadow(
-                            elevation = 8.dp,
-                            shape = RoundedCornerShape(100.dp),
-                            spotColor = MaterialTheme.colorScheme.outline
-                        )
+                        modifier = Modifier
+                            .shadow(
+                                elevation = 8.dp,
+                                shape = RoundedCornerShape(100.dp),
+                                spotColor = MaterialTheme.colorScheme.outline
+                            )
+                            .clickable { onProfileClick() }
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,

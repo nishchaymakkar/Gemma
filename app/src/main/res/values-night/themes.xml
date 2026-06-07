@@ -4,6 +4,7 @@
     <style name="Base.Theme.MyAndroidApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- BackgroundDark color from our Theme -->
         <item name="android:statusBarColor">#191C1A</item>
+        <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowLightStatusBar">false</item> <!-- Makes icons light for dark backgrounds -->
     </style>
 

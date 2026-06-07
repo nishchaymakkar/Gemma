@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Gemma</string>
+    <string name="back">Atrás</string>
+    <string name="app_settings">Ajustes de la aplicación</string>
+    <string name="appearance">Apariencia</string>
+    <string name="app_language">Idioma de la aplicación</string>
+    <string name="select_language">Seleccionar idioma</string>
+    <string name="system_default">Sistema (predeterminado)</string>
+    <string name="light">Luz</string>
+    <string name="dark">Oscuro</string>
+
+    <string name="lang_en">Inglés</string>
+    <string name="lang_hi">Hindi</string>
+    <string name="lang_es">Español</string>
+    <string name="lang_fr">Francés</string>
+    <string name="lang_de">Alemán</string>
+</resources>
