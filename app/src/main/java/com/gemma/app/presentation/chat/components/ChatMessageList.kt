@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -14,7 +14,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.height
@@ -38,17 +37,24 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.compose.foundation.background
 import android.net.Uri
 import androidx.compose.foundation.gestures.ScrollableDefaults
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberOverscrollEffect
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.ui.platform.LocalClipboard
+import androidx.compose.ui.platform.ClipEntry
+import android.content.ClipData
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun ChatMessageList(
     messages: List<ChatMessage>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isLoading: Boolean = false,
+    onListenClick: (String) -> Unit = {}
 ) {
     val listState = rememberLazyListState()
 
@@ -65,11 +71,16 @@ fun ChatMessageList(
         overscrollEffect = rememberOverscrollEffect(),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        items(messages, key = { it.id }) { message ->
+        itemsIndexed(messages, key = { _, item -> item.id }) { index, message ->
             if (message.isFromUser) {
                 UserMessageBubble(message)
             } else {
-                GemmaMessageBubble(message.text)
+                val isStreaming = isLoading && index == messages.lastIndex
+                GemmaMessageBubble(
+                    text = message.text,
+                    showOptions = !isStreaming,
+                    onListenClick = onListenClick
+                )
             }
         }
     }
@@ -163,7 +174,13 @@ fun UserMessageBubble(message: ChatMessage) {
 }
 
 @Composable
-fun GemmaMessageBubble(text: String) {
+fun GemmaMessageBubble(
+    text: String,
+    showOptions: Boolean = true,
+    onListenClick: (String) -> Unit = {}
+) {
+    val clipboard = LocalClipboard.current
+    val scope = rememberCoroutineScope()
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -174,6 +191,31 @@ fun GemmaMessageBubble(text: String) {
             fontSize = 16.sp,
             lineHeight = 24.sp
         )
+        if (showOptions && text.isNotEmpty()) {
+            Row(
+                modifier = Modifier.padding(top = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                IconButton(onClick = {
+                    scope.launch {
+                        clipboard.setClipEntry(ClipEntry(ClipData.newPlainText("Gemma Message", text)))
+                    }
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.ContentCopy,
+                        contentDescription = "Copy",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                IconButton(onClick = { onListenClick(text) }) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.VolumeUp,
+                        contentDescription = "Listen",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
     }
 }
 

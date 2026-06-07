@@ -32,6 +32,8 @@ class LlmRepository {
     fun streamChat(
         message: String,
         images: List<Uri>,
+        webSearch: Boolean = false,
+        model: String = "gemma4:e4b",
         contentResolver: ContentResolver,
         onToken: (String) -> Unit,
         onComplete: () -> Unit,
@@ -41,6 +43,8 @@ class LlmRepository {
         val jsonRequest = buildJsonRequest(
             message = message,
             images = images,
+            webSearch = webSearch,
+            model = model,
             contentResolver = contentResolver
         )
 
@@ -84,12 +88,18 @@ class LlmRepository {
     private fun buildJsonRequest(
         message: String,
         images: List<Uri>,
+        webSearch: Boolean,
+        model: String,
         contentResolver: ContentResolver
     ): String {
         val request = JSONObject()
-            .put("model", if (images.isEmpty()) "gemma4:e4b" else "gemma4:e4b")
+            .put("model", model)
             .put("stream", true)
             .put("messages", JSONArray().put(buildMessageJson(message, images, contentResolver)))
+
+        if (webSearch) {
+            request.put("webSearch", true)
+        }
 
         return request.toString()
     }

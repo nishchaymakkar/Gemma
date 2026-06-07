@@ -10,5 +10,6 @@ data class ChatMessage(
 data class ChatUiState(
     val isLoading: Boolean = false,
     val messages: List<ChatMessage> = emptyList(),
-    val error: String? = null
+    val error: String? = null,
+    val selectedModel: String = "gemma4:e4b"
 )

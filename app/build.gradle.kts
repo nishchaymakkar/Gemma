@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "com.gemma.app"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.gemma.app"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0"
 
@@ -38,7 +38,7 @@ android {
 
 dependencies {
     implementation("androidx.core:core-ktx:1.18.0")
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation("androidx.core:core-splashscreen:1.2.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.10.0")
     implementation("androidx.activity:activity-compose:1.13.0")
     
@@ -63,7 +63,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     // Coil for images
-    implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation("io.coil-kt:coil-compose:2.7.0")
 
     // Ktor
     val ktorVersion = "3.4.3"
@@ -77,9 +77,9 @@ dependencies {
     implementation("io.insert-koin:koin-androidx-compose:$koinVersion")
 
     // OkHttp & SSE
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.squareup.okhttp3:okhttp-sse:4.12.0")
+    implementation("com.squareup.okhttp3:okhttp:5.3.2")
+    implementation("com.squareup.okhttp3:okhttp-sse:5.3.2")
     
     // Moshi for JSON parsing
-    implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
+    implementation("com.squareup.moshi:moshi-kotlin:1.15.2")
 }
