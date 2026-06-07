@@ -22,6 +22,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Public
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
@@ -55,11 +57,12 @@ import androidx.core.net.toUri
 @Composable
 fun ChatInputBar(
     isLoading: Boolean = false,
-    onSend: (String, List<Uri>) -> Unit,
+    onSend: (String, List<Uri>, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var text by rememberSaveable { mutableStateOf("") }
     var showAttachmentMenu by remember { mutableStateOf(false) }
+    var isWebSearchEnabled by rememberSaveable { mutableStateOf(false) }
     var selectedImagesUris by rememberSaveable { mutableStateOf(emptyList<String>()) }
     val selectedImages = selectedImagesUris.map { it.toUri() }
     
@@ -149,6 +152,18 @@ fun ChatInputBar(
                     }
                 }
 
+                IconButton(
+                    onClick = { isWebSearchEnabled = !isWebSearchEnabled },
+                    modifier = Modifier.size(36.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Public,
+                        contentDescription = "Web Search",
+                        tint = if (isWebSearchEnabled) Color.Blue.copy(.8f) else MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+
                 Box(
                     modifier = Modifier
                         .weight(1f)
@@ -184,9 +199,10 @@ fun ChatInputBar(
                     IconButton(
                         onClick = {
                             if (text.isNotBlank() && !isLoading) {
-                                onSend(text, selectedImages)
+                                onSend(text, selectedImages, isWebSearchEnabled)
                                 text = ""
                                 selectedImagesUris = emptyList()
+                                isWebSearchEnabled = false
                             }
                         }
                     ) {
@@ -249,6 +265,23 @@ fun ChatInputBar(
                             onFileClick = { showAttachmentMenu = false }
                         )
                     }
+                }
+            }
+
+            Surface(
+                modifier = Modifier
+                    .size(44.dp)
+                    .shadow(elevation = 16.dp, spotColor = MaterialTheme.colorScheme.outline, ambientColor = MaterialTheme.colorScheme.outline, shape = CircleShape),
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.surface
+            ) {
+                IconButton(onClick = { isWebSearchEnabled = !isWebSearchEnabled }) {
+                    Icon(
+                        imageVector = Icons.Default.Public,
+                        contentDescription = "Web Search",
+                        modifier = Modifier.size(20.dp),
+                        tint = if (isWebSearchEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             }
             
@@ -340,9 +373,10 @@ fun ChatInputBar(
                             IconButton(
                                 onClick = {
                                     if ((text.isNotBlank() || selectedImages.isNotEmpty()) && !isLoading) {
-                                        onSend(text, selectedImages)
+                                        onSend(text, selectedImages, isWebSearchEnabled)
                                         text = ""
                                         selectedImagesUris = emptyList()
+                                        isWebSearchEnabled = false
                                     }
                                 }
                             ) {

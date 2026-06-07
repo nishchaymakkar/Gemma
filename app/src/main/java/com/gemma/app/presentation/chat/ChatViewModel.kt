@@ -26,6 +26,7 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
         when (event) {
             is ChatEvent.SendMessage -> sendMessage(event)
             ChatEvent.NewChat -> newChat()
+            is ChatEvent.SelectModel -> selectModel(event.model)
         }
     }
 
@@ -59,6 +60,8 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
         currentEventSource = repository.streamChat(
             message = trimmedMessage,
             images = event.images,
+            webSearch = event.webSearch,
+            model = uiState.value.selectedModel,
             onToken = { token ->
                 _uiState.update { state ->
                     state.copy(
@@ -98,6 +101,10 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
         currentEventSource?.cancel()
         currentEventSource = null
         _uiState.update { ChatUiState() }
+    }
+
+    private fun selectModel(model: String) {
+        _uiState.update { it.copy(selectedModel = model) }
     }
 
     override fun onCleared() {
